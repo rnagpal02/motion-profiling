@@ -1,0 +1,23 @@
+\documentclass[12pt, letterpaper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[margin=1.0in]{geometry}
+\title{Quintic Spline Math}
+\author{Rajin Nagpal}
+
+\begin{document}
+\maketitle
+
+The purpose of this is to demonstrate the math behind computing the splines used in the Motion Profiling project. The purpose of these splines is to create smooth paths between waypoints for a robot to efficiently traverse. To accomplish this, each spline will be a quintic polynomial defined in parametric form. The following guidelines will be used when computing the splines: \begin{itemize}
+\item Each spline will consist of a starting point, $P_0$, and an ending point, $P_1$ \begin{itemize}
+\item Each point $P_i$ will consist of an $x_i$, $y_i$, $\theta_i$ representing its location and heading on a Cartesian coordinate plane
+\end{itemize}
+\item Each spline will be modeled parametrically with the following two components: \begin{itemize}
+\item $x(t) = a_x t^5 + b_x t^4 + c_x t^3 + d_x t^2 + e_x t + f_x$
+\item $y(t) = a_y t^5 + b_y t^4 + c_y t^3 + d_y t^2 + e_y t + f_y$
+\end{itemize}
+\item For every spline, $P_0$ will be defined when $t = 0$ and $P_1$ when $t = 1$ such that for every spline, the domain of $t$ that encompasses the spline is $0 \leq t \leq 1$
+\item In order to maintain smooth curvature between splines, the second derivative at the endpoints of the spline will be $0$ such that $\frac{d^2y}{dx^2} (P_0) = 0$ and $\frac{d^2y}{dx^2} (P_1) = 0$
+\end{itemize}
+
+The goal of the work shown below is to compute expressions for calculating the 12 coefficients that make up the quintic spline, $a_x, b_x, c_x, d_x, e_x, f_x, a_y, b_y, c_y, d_y, e_y, f_y$ all in terms of the points given $x_0, y_0, \theta_0, x_1, y_1, \theta_1$ so that given two waypoints, a quintic spline modeling the path between the waypoints can be computed in $O(1)$ time.
+\end{document}
