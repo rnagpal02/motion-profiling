@@ -4,6 +4,10 @@
 \title{Quintic Spline Math}
 \author{Rajin Nagpal}
 
+\usepackage{amsmath}
+
+\setlength{\parindent}{0pt}
+
 \begin{document}
 \maketitle
 
@@ -20,4 +24,84 @@ The purpose of this is to demonstrate the math behind computing the splines used
 \end{itemize}
 
 The goal of the work shown below is to compute expressions for calculating the 12 coefficients that make up the quintic spline, $a_x, b_x, c_x, d_x, e_x, f_x, a_y, b_y, c_y, d_y, e_y, f_y$ all in terms of the points given $x_0, y_0, \theta_0, x_1, y_1, \theta_1$ so that given two waypoints, a quintic spline modeling the path between the waypoints can be computed in $O(1)$ time.
+
+\newpage
+First, we can use the starting and ending points of the spline to determine equations for when $t = 0$ and $t = 1$. We know the starting point, when $t = 0$, is $(x_0, y_0)$ and the ending point, when $t = 1$, is $(x_1, y_1)$. \\
+
+From this, we get the following equations 
+\[x(0) = a_x (0)^5 + b_x (0)^4 + c_x (0)^3 + d_x (0)^2 + e_x (0) + f_x = x_0\]
+\begin{equation}
+\boxed{\Rightarrow f_x = x_0}
+\end{equation}
+
+\[x(1) = a_x (1)^5 + b_x (1)^4 + c_x (1)^3 + d_x (1)^2 + e_x (1) + f_x = x_1\]
+\[\Rightarrow x(1) = a_x + b_x + c_x + d_x + e_x + f_x = x_1\]
+
+\[y(0) = a_y (0)^5 + b_y (0)^4 + c_y (0)^3 + d_y (0)^2 + e_y (0) + f_y = y_0\]
+\begin{equation}
+\boxed{\Rightarrow f_y = y_0}
+\end{equation}
+
+\[y(1) = a_y (1)^5 + b_y (1)^4 + c_y (1)^3 + d_y (1)^2 + e_y (1) + f_y = y_1\]
+\[\Rightarrow y(1) = a_y + b_y + c_y + d_y + e_y + f_y = y_1\]
+
+Next we can define the first and second derivative for the two parametric equations. \\
+For $x(t)$: 
+\[x'(t) = 5a_xt^4 + 4b_xt^3 + 3c_xt^2 + 2d_xt + e_x\]
+\[x''(t) = 20a_xt^3 + 12b_xt^2 + 6c_xt + 2d_x\]
+
+For $y(t)$: 
+\[y'(t) = 5a_yt^4 + 4b_yt^3 + 3c_yt^2 + 2d_yt + e_y\]
+\[y''(t) = 20a_yt^3 + 12b_yt^2 + 6c_yt + 2d_y\]
+
+
+Now, we know the second derivative must be $0$ at the endpoints for $x(t)$ and $y(t)$, so this translates to 
+\[x''(0) = 0\]
+\[\Rightarrow 20a_x(0)^3 + 12b_x(0)^2 + 6c_x(0) + 2d_x = 0\]
+\[\Rightarrow 2d_x = 0\]
+\begin{equation}
+\boxed{\Rightarrow d_x = 0}
+\end{equation}
+
+\[x''(1) = 0\]
+\[\Rightarrow 20a_x(1)^3 + 12b_x(1)^2 + 6c_x(1) + 2d_x = 0\]
+\[\Rightarrow 20a_x + 12b_x + 6c_x + 2d_x = 0\]
+
+\[y''(0) = 0\]
+\[\Rightarrow 20a_y(0)^3 + 12b_y(0)^2 + 6c_y(0) + 2d_y = 0\]
+\[\Rightarrow 2d_y = 0\]
+\begin{equation}
+\boxed{\Rightarrow d_y = 0}
+\end{equation}
+
+\[y''(1) = 0\]
+\[\Rightarrow 20a_y(1)^3 + 12b_y(1)^2 + 6c_y(1) + 2d_y = 0\]
+\[\Rightarrow 20a_y + 12b_y + 6c_y + 2d_y = 0\]
+
+We can now incorporate the first derivatives using the $\theta_0$ and $\theta_1$, the heading at the endpoints. The headings can be thought of as representative of the derivative of the quintic spline at the endpoints such that if $f(x)$ is the function definition of the quintic spline, then \[\frac{dy}{dx}(P_i) = \tan(\theta_i) = \frac{\sin(\theta_i)}{\cos(\theta_i)}\] Using \[\frac{dy}{dx} = \frac{y'(t)}{x'(t)}\] we get \[\frac{y'(t)}{x'(t)} = \frac{\sin(\theta_i)}{\cos(\theta_i)}\]
+
+Here we can see that we could significantly simplify our equations if we could simply equate the numerator and denominator, but that is not allowed since the numerator/denominator on one side may be scaled to a different magnitude than the other. However, we can work around this by introducing a constant, $s$, which represents scaling one fraction by some scalar amount. This both obeys the laws of mathematics and allows flexibility in the magnitudes of the fractions, so long as the ratios match. For simplicity, we'll scale the $\frac{\sin(\theta)}{\cos(\theta)}$ side as such
+\[\frac{y'(t)}{x'(t)} = \frac{s \cdot \sin(\theta_i)}{s \cdot \cos(\theta_i)}\]
+which now gives 
+\[y'(t) = s \cdot \sin(\theta_i)\]
+\[x'(t) = s \cdot \cos(\theta_i)\]
+
+\newpage
+We can now apply this to our endpoints when $t = 0$ and $t = 1$ 
+ \[x'(0) = s \cdot \cos(\theta_0)\]
+\begin{equation}
+\boxed{\Rightarrow e_x = s \cdot \cos(\theta_0)}
+\end{equation} 
+
+\[x'(1) = s \cdot \cos(\theta_1)\]
+\[\Rightarrow 5a_x + 4b_x + 3c_x + 2d_x + e_x = s \cdot \cos(\theta_1)\]
+
+\[y'(0) = s \cdot \sin(\theta_0)\]
+\begin{equation}
+\boxed{\Rightarrow e_y = s \cdot \sin(\theta_0)}
+\end{equation} 
+
+\[y'(1) = s \cdot \sin(\theta_1)\]
+\[\Rightarrow 5a_y + 4b_y + 3c_y + 2d_y + e_y = s \cdot \sin(\theta_1)\]
+
 \end{document}
