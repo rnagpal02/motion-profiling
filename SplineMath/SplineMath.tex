@@ -3,6 +3,7 @@
 \usepackage[margin=1.0in]{geometry}
 \title{Quintic Spline Math}
 \author{Rajin Nagpal}
+\date{}
 
 \usepackage{amsmath, mathtools}
 
@@ -47,37 +48,6 @@ a_y (1)^5 + b_y (1)^4 + c_y (1)^3 + d_y (1)^2 + e_y (1) + f_y &= y_1 \nonumber \
 \Rightarrow a_y + b_y + c_y + d_y + e_y + f_y &= y_1
 \end{align}
 
-Next we can define the first and second derivative for the two parametric equations. \\
-For \(x(t)\): 
-\[x'(t) = 5a_xt^4 + 4b_xt^3 + 3c_xt^2 + 2d_xt + e_x\]
-\[x''(t) = 20a_xt^3 + 12b_xt^2 + 6c_xt + 2d_x\]
-
-For \(y(t)\): 
-\[y'(t) = 5a_yt^4 + 4b_yt^3 + 3c_yt^2 + 2d_yt + e_y\]
-\[y''(t) = 20a_yt^3 + 12b_yt^2 + 6c_yt + 2d_y\]
-
-
-Now, we know the second derivative must be \(0\) at the endpoints for \(x(t)\) and \(y(t)\), so this translates to 
-\begin{align}
-x''(0) &= 0 \nonumber \\
-\Rightarrow 20a_x(0)^3 + 12b_x(0)^2 + 6c_x(0) + 2d_x &= 0 \nonumber \\
-\Rightarrow 2d_x &= 0 \nonumber \\
-\Aboxed{\Rightarrow d_x &= 0} \\
-\nonumber \\
-x''(1) &= 0 \nonumber \\
-\Rightarrow 20a_x(1)^3 + 12b_x(1)^2 + 6c_x(1) + 2d_x &= 0 \nonumber \\
-\Rightarrow 20a_x + 12b_x + 6c_x + 2d_x &= 0 \\
-\nonumber \\
-y''(0) &= 0 \nonumber \\
-\Rightarrow 20a_y(0)^3 + 12b_y(0)^2 + 6c_y(0) + 2d_y &= 0 \nonumber \\
-\Rightarrow 2d_y &= 0 \nonumber \\
-\Aboxed{\Rightarrow d_y &= 0} \\
-\nonumber \\
-y''(1) &= 0 \nonumber \\
-\Rightarrow 20a_y(1)^3 + 12b_y(1)^2 + 6c_y(1) + 2d_y &= 0 \nonumber \\
-\Rightarrow 20a_y + 12b_y + 6c_y + 2d_y &= 0 
-\end{align}
-
 We can now incorporate the first derivatives using the \(\theta_0\) and \(\theta_1\), the heading at the endpoints. The headings can be thought of as representative of the derivative of the quintic spline at the endpoints such that if \(f(x)\) is the function definition of the quintic spline, then \[\frac{dy}{dx}(P_i) = \tan(\theta_i) = \frac{\sin(\theta_i)}{\cos(\theta_i)}\] Using \[\frac{dy}{dx} = \frac{y'(t)}{x'(t)}\] we get \[\frac{y'(t)}{x'(t)} = \frac{\sin(\theta_i)}{\cos(\theta_i)}\]
 
 Here we can see that we could significantly simplify our equations if we could simply equate the numerator and denominator, but that is not allowed since the numerator/denominator on one side may be scaled to a different magnitude than the other. However, we can work around this by introducing a constant, \(s\), which represents scaling one fraction by some scalar amount. This both obeys the laws of mathematics and allows flexibility in the magnitudes of the fractions, so long as the ratios match. For simplicity, we'll scale the \(\frac{\sin(\theta)}{\cos(\theta)}\) side as such
@@ -88,19 +58,58 @@ y'(t) &= s \cdot \sin(\theta_i) \\
 x'(t) &= s \cdot \cos(\theta_i)
 \end{align*}
 
+To use these, we should define the first derivative for \(x(t)\) and \(y(t)\) from the polynomial definition
+\begin{align}
+x'(t) &= 5a_xt^4 + 4b_xt^3 + 3c_xt^2 + 2d_xt + e_x \nonumber \\
+y'(t) &= 5a_yt^4 + 4b_yt^3 + 3c_yt^2 + 2d_yt + e_y \nonumber
+\end{align}
+
 We can now apply this to our endpoints when \(t = 0\) and \(t = 1\) 
 \begin{align}
 x'(0) &= s \cdot \cos(\theta_0) \nonumber \\
+5a_x(0)^4 + 4b_x(0)^3 + 3c_x(0)^2 + 2d_x(0) + e_x &= s \cdot \cos(\theta_0) \nonumber \\
 \Aboxed{\Rightarrow e_x &= s \cdot \cos(\theta_0)} \\
 \nonumber \\
 x'(1) &= s \cdot \cos(\theta_1) \nonumber \\
+5a_x(1)^4 + 4b_x(1)^3 + 3c_x(1)^2 + 2d_x(1) + e_x &= s \cdot \cos(\theta_1) \nonumber \\
 \Rightarrow 5a_x + 4b_x + 3c_x + 2d_x + e_x &= s \cdot \cos(\theta_1) \\
 \nonumber \\
 y'(0) &= s \cdot \sin(\theta_0) \nonumber \\
+5a_y(0)^4 + 4b_y(0)^3 + 3c_y(0)^2 + 2d_y(0) + e_y &= s \cdot \sin(\theta_0) \nonumber \\
 \Aboxed{\Rightarrow e_y &= s \cdot \sin(\theta_0)} \\
 \nonumber \\
 y'(1) &= s \cdot \sin(\theta_1) \nonumber \\
-\Rightarrow 5a_y + 4b_y + 3c_y + 2d_y + e_y &= s \cdot \sin(\theta_1)
+5a_y(1)^4 + 4b_y(1)^3 + 3c_y(1)^2 + 2d_y(1) + e_y &= s \cdot \sin(\theta_1) \nonumber \\
+\Rightarrow 5a_y + 4b_y + 3c_y + 2d_y + e_y &= s \cdot \sin(\theta_1) 
+\end{align}
+
+Now, we know the second derivative must be \(0\) at the endpoints for \(x(t)\) and \(y(t)\) so we get \(x''(0) = 0\), \(x''(1) = 0\), \(y''(0) = 0\), \(y''(1) = 0\). Again, let's start by first defining the second derivative of \(x(t)\) and \(y(t)\) from the polynomial definition
+\begin{align}
+x''(t) = 20a_xt^3 + 12b_xt^2 + 6c_xt + 2d_x \nonumber \\
+y''(t) = 20a_yt^3 + 12b_yt^2 + 6c_yt + 2d_y \nonumber
+\end{align}
+
+\newpage
+Now we can apply this to the endpoints
+
+\begin{align}
+x''(0) &= 0 \nonumber \\
+20a_x(0)^3 + 12b_x(0)^2 + 6c_x(0) + 2d_x &= 0 \nonumber \\
+2d_x &= 0 \nonumber \\
+\Aboxed{\Rightarrow d_x &= 0} \\
+\nonumber \\
+x''(1) &= 0 \nonumber \\
+20a_x(1)^3 + 12b_x(1)^2 + 6c_x(1) + 2d_x &= 0 \nonumber \\
+\Rightarrow 20a_x + 12b_x + 6c_x + 2d_x &= 0 \\
+\nonumber \\
+y''(0) &= 0 \nonumber \\
+20a_y(0)^3 + 12b_y(0)^2 + 6c_y(0) + 2d_y &= 0 \nonumber \\
+2d_y &= 0 \nonumber \\
+\Aboxed{\Rightarrow d_y &= 0} \\
+\nonumber \\
+y''(1) &= 0 \nonumber \\
+20a_y(1)^3 + 12b_y(1)^2 + 6c_y(1) + 2d_y &= 0 \nonumber \\
+\Rightarrow 20a_y + 12b_y + 6c_y + 2d_y &= 0 
 \end{align}
 
 \end{document}
