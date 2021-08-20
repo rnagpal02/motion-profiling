@@ -112,4 +112,77 @@ y''(1) &= 0 \nonumber \\
 \Rightarrow 20a_y + 12b_y + 6c_y + 2d_y &= 0 
 \end{align}
 
+\newpage
+Using the initial constraints, we have been able to solve for 6 of the 12 coefficients as shown in equations \((1)\), \((3)\), \((5)\), \((7)\), \((9)\), \((11)\). We can now substitute those values into the rest of the equations to solve for the remaining 6 coefficients. \\
+
+Substituting in we get the following equations
+\begin{align}
+(2) &\Rightarrow & a_x + b_x + c_x + d_x + e_x + f_x &= x_1 \nonumber \\
+&& a_x + b_x + c_x + (0) + (s \cdot \cos(\theta_0)) + (x_0) &= x_1 \nonumber \\
+&& a_x + b_x + c_x &= x_1 - x_0 - s \cdot \cos(\theta_0) \\
+\nonumber \\
+(4) &\Rightarrow & a_y + b_y + c_y + d_y + e_y + f_y &= y_1 \nonumber \\
+&& a_y + b_y + c_y + (0) + (s \cdot \sin(\theta_0)) + (y_0) &= y_1 \nonumber \\
+&& a_y + b_y + c_y &= y_1 - y_0 - s \cdot \sin(\theta_0) \\
+\nonumber \\
+(6) &\Rightarrow & 5a_x + 4b_x + 3c_x + 2d_x + e_x &= s \cdot \cos(\theta_1) \nonumber \\
+&& 5a_x + 4b_x + 3c_x + 2(0) + (s \cdot \cos(\theta_0)) &= s \cdot \cos(\theta_1) \nonumber \\
+&& 5a_x + 4b_x + 3c_x &= s \cdot \cos(\theta_1) - s \cdot \cos(\theta_0) \\
+\nonumber \\
+(8) &\Rightarrow & 5a_y + 4b_y + 3c_y + 2d_y + e_y &= s \cdot \sin(\theta_1) \nonumber \\
+&& 5a_y + 4b_y + 3c_y + 2(0) + (s \cdot \sin(\theta_0)) &= s \cdot \sin(\theta_1) \nonumber \\
+&& 5a_y + 4b_y + 3c_y &= s \cdot \sin(\theta_1) - s \cdot \sin(\theta_0) \\
+\nonumber \\
+(10) &\Rightarrow & 20a_x + 12b_x + 6c_x + 2d_x &= 0 \nonumber \\
+&& 20a_x + 12b_x + 6c_x + 2(0) &= 0 \nonumber \\
+&& 20a_x + 12b_x + 6c_x &= 0 \\
+\nonumber \\
+(12) &\Rightarrow & 20a_y + 12b_y + 6c_y + 2d_y &= 0 \nonumber \\
+&& 20a_y + 12b_y + 6c_y + 2(0) &= 0 \nonumber \\
+&& 20a_y + 12b_y + 6c_y &= 0 
+\end{align}
+
+Using these equations, we can crate 2 systems of 3 linear equations as shown
+\begin{align*}
+(13) &\Rightarrow & a_x + b_x + c_x &= x_1 - x_0 - s \cdot \cos(\theta_0) \\
+(14) &\Rightarrow & 5a_x + 4b_x + 3c_x &= s \cdot \cos(\theta_1) - s \cdot \cos(\theta_0) \\
+(15) &\Rightarrow & 20a_x + 12b_x + 6c_x &= 0 \\
+\\ \\
+(16) &\Rightarrow & a_y + b_y + c_y &= y_1 - y_0 - s \cdot \sin(\theta_0) \\
+(17) &\Rightarrow & 5a_y + 4b_y + 3c_y &= s \cdot \sin(\theta_1) - s \cdot \sin(\theta_0) \\
+(18) &\Rightarrow & 20a_y + 12b_y + 6c_y &= 0 
+\end{align*}
+
+We can write both of these systems in \(Ax = b\) form
+\begin{equation*}
+\begin{bmatrix}
+1 & 1 & 1 \\
+5 & 4 & 3 \\
+20 & 12 & 6
+\end{bmatrix}
+\begin{bmatrix}
+a_x \\ b_x \\ c_x
+\end{bmatrix}
+= \begin{bmatrix}
+x_1 - x_0 - s \cdot \cos(\theta_0) \\
+s \cdot \cos(\theta_1) - s \cdot \cos(\theta_0) \\
+0
+\end{bmatrix}
+\end{equation*}
+
+\begin{equation*}
+\begin{bmatrix}
+1 & 1 & 1 \\
+5 & 4 & 3 \\
+20 & 12 & 6
+\end{bmatrix}
+\begin{bmatrix}
+a_y \\ b_y \\ c_y
+\end{bmatrix}
+= \begin{bmatrix}
+y_1 - y_0 - s \cdot \sin(\theta_0) \\
+s \cdot \sin(\theta_1) - s \cdot \sin(\theta_0) \\
+0
+\end{bmatrix}
+\end{equation*}
 \end{document}
