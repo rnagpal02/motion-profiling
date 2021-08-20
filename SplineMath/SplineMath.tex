@@ -145,11 +145,11 @@ Substituting in we get the following equations
 Using these equations, we can crate 2 systems of 3 linear equations as shown
 \begin{align*}
 (13) &\Rightarrow & a_x + b_x + c_x &= x_1 - x_0 - s \cdot \cos(\theta_0) \\
-(14) &\Rightarrow & 5a_x + 4b_x + 3c_x &= s \cdot \cos(\theta_1) - s \cdot \cos(\theta_0) \\
-(15) &\Rightarrow & 20a_x + 12b_x + 6c_x &= 0 \\
+(15) &\Rightarrow & 5a_x + 4b_x + 3c_x &= s \cdot \cos(\theta_1) - s \cdot \cos(\theta_0) \\
+(17) &\Rightarrow & 20a_x + 12b_x + 6c_x &= 0 \\
 \\ \\
-(16) &\Rightarrow & a_y + b_y + c_y &= y_1 - y_0 - s \cdot \sin(\theta_0) \\
-(17) &\Rightarrow & 5a_y + 4b_y + 3c_y &= s \cdot \sin(\theta_1) - s \cdot \sin(\theta_0) \\
+(14) &\Rightarrow & a_y + b_y + c_y &= y_1 - y_0 - s \cdot \sin(\theta_0) \\
+(16) &\Rightarrow & 5a_y + 4b_y + 3c_y &= s \cdot \sin(\theta_1) - s \cdot \sin(\theta_0) \\
 (18) &\Rightarrow & 20a_y + 12b_y + 6c_y &= 0 
 \end{align*}
 
@@ -403,4 +403,179 @@ A &= LU \\
 0 & 0 & 2
 \end{bmatrix}
 \end{align*}
+
+\newpage
+\underline{Solve for \(a_x\), \(b_x\), \(c_x\)}
+\begin{equation*}
+\begin{bmatrix}
+1 & 1 & 1 \\
+5 & 4 & 3 \\
+20 & 12 & 6
+\end{bmatrix}
+\begin{bmatrix}
+a_x \\ b_x \\ c_x
+\end{bmatrix}
+= \begin{bmatrix}
+x_1 - x_0 - s \cdot \cos(\theta_0) \\
+s \cdot \cos(\theta_1) - s \cdot \cos(\theta_0) \\
+0
+\end{bmatrix}
+\end{equation*}
+
+Substituting in our LU factorization, this becomes
+\begin{equation}
+\begin{bmatrix}
+1 & 0 & 0 \\
+5 & 1 & 0 \\
+20 & 8 & 1
+\end{bmatrix}
+\cdot \begin{bmatrix}
+1 & 1 & 1 \\
+0 & -1 & -2 \\
+0 & 0 & 2
+\end{bmatrix}
+\begin{bmatrix}
+a_x \\ b_x \\ c_x
+\end{bmatrix}
+= \begin{bmatrix}
+x_1 - x_0 - s \cdot \cos(\theta_0) \\
+s \cdot \cos(\theta_1) - s \cdot \cos(\theta_0) \\
+0
+\end{bmatrix}
+\end{equation}
+
+Now, let's define a matrix \(z\) such that 
+\begin{equation}
+\begin{bmatrix}
+1 & 1 & 1 \\
+0 & -1 & -2 \\
+0 & 0 & 2
+\end{bmatrix}
+\begin{bmatrix}
+a_x \\ b_x \\ c_x
+\end{bmatrix}
+= \begin{bmatrix}
+z_1 \\ z_2 \\ z_3
+\end{bmatrix}
+\end{equation}
+
+We can substitute this back into equation (19) to get
+\begin{equation*}
+\begin{bmatrix}
+1 & 0 & 0 \\
+5 & 1 & 0 \\
+20 & 8 & 1
+\end{bmatrix}
+\cdot \begin{bmatrix}
+z_1 \\ z_2 \\ z_3
+\end{bmatrix}
+= \begin{bmatrix}
+x_1 - x_0 - s \cdot \cos(\theta_0) \\
+s \cdot \cos(\theta_1) - s \cdot \cos(\theta_0) \\
+0
+\end{bmatrix}
+\end{equation*}
+
+Now we can solve for \(z\) using forward substitution 
+\begin{flalign*}
+&z_1 + (0)z_2 + (0)z_3 = x_1 - x_0 - s \cdot \cos(\theta_0)& \\
+&z_1 = x_1 - x_0 - s \cdot \cos(\theta_0)& \\ \\
+&5z_1 + z_2 + (0)z_3 = s \cdot \cos(\theta_1) - s \cdot \cos(\theta_0)& \\
+&z_2 = s \cdot \cos(\theta_1) - s \cdot \cos(\theta_0) - 5(x_1 - x_0 - s \cdot \cos(\theta_0))& \\
+&z_2 = s \cdot \cos(\theta_1) - s \cdot \cos(\theta_0) -5x_1 + 5x_0 + 5s \cdot \cos(\theta_0)& \\
+&z_2 = -5x_1 + 5x_0  + s \cdot \cos(\theta_1) + 4s \cdot \cos(\theta_0)& \\ \\
+&20z_1 + 8z_2 + z_3 = 0& \\
+&z_3 = -20(x_1 - x_0 - s \cdot \cos(\theta_0)) - 8(-5x_1 + 5x_0  + s \cdot \cos(\theta_1) + 4s \cdot \cos(\theta_0))& \\
+&z_3 = -20x_1 + 20x_0 + 20s \cdot \cos(\theta_0) + 40x_1 - 40x_0 - 8s \cdot \cos(\theta_1) - 32s \cdot \cos(\theta_0)& \\ 
+&z_3 = 20x_1 - 20x_0 - 8s \cdot \cos(\theta_1) -12s \cdot \cos(\theta_0)&
+\end{flalign*}
+
+Thus, we get 
+\begin{equation*}
+z = \begin{bmatrix}
+x_1 - x_0 - s \cdot \cos(\theta_0) \\
+-5x_1 + 5x_0  + s \cdot \cos(\theta_1) + 4s \cdot \cos(\theta_0) \\
+20x_1 - 20x_0 - 8s \cdot \cos(\theta_1) -12s \cdot \cos(\theta_0)
+\end{bmatrix}
+\end{equation*}
+
+\newpage
+We can now substitute \(z\) into equation (20) to get 
+\begin{equation*}
+\begin{bmatrix}
+1 & 1 & 1 \\
+0 & -1 & -2 \\
+0 & 0 & 2
+\end{bmatrix}
+\begin{bmatrix}
+a_x \\ b_x \\ c_x
+\end{bmatrix}
+= \begin{bmatrix}
+x_1 - x_0 - s \cdot \cos(\theta_0) \\
+-5x_1 + 5x_0  + s \cdot \cos(\theta_1) + 4s \cdot \cos(\theta_0) \\
+20x_1 - 20x_0 - 8s \cdot \cos(\theta_1) -12s \cdot \cos(\theta_0)
+\end{bmatrix}
+\end{equation*}
+through which we can now solve for \(a_x\), \(b_x\), \(c_x\) using back substitution
+\begin{flalign}
+&0(a_x) + 0(b_x) + 2c_x = 20x_1 - 20x_0 - 8s \cdot \cos(\theta_1) -12s \cdot \cos(\theta_0)& \nonumber \\
+&2c_x = 20x_1 - 20x_0 - 8s \cdot \cos(\theta_1) - 12s \cdot \cos(\theta_0)& \nonumber \\
+&c_x = 10x_1 - 10x_0 - 4s \cdot \cos(\theta_1) - 6s \cdot \cos(\theta_0)& \\
+\nonumber \\
+&0(a_x) -b_x - 2c_x = -5x_1 + 5x_0  + s \cdot \cos(\theta_1) + 4s \cdot \cos(\theta_0)& \nonumber \\
+-&b_x = -5x_1 + 5x_0  + s \cdot \cos(\theta_1) + 4s \cdot \cos(\theta_0) + 2(10x_1 - 10x_0 - 4s \cdot \cos(\theta_1) - 6s \cdot \cos(\theta_0))& \nonumber \\
+-&b_x = -5x_1 + 5x_0  + s \cdot \cos(\theta_1) + 4s \cdot \cos(\theta_0) + 20x_1 - 20x_0 - 8s \cdot \cos(\theta_1) - 12s \cdot \cos(\theta_0)& \nonumber \\
+-&b_x = 15x_1 - 15x_0 - 7s \cdot \cos(\theta_1) - 8s \cdot \cos(\theta_0)& \nonumber \\
+&b_x = -15x_1 + 15x_0 + 7s \cdot \cos(\theta_1) + 8s \cdot \cos(\theta_0)& \\ 
+\nonumber \\
+&a_x + b_x + c_x = x_1 - x_0 - s \cdot \cos(\theta_0)& \nonumber \\
+&\begin{multlined} a_x = x_1 - x_0 - s \cdot \cos(\theta_0) - (-15x_1 + 15x_0 + 7s \cdot \cos(\theta_1) + 8s \cdot \cos(\theta_0)) \\ - (10x_1 - 10x_0 - 4s \cdot \cos(\theta_1) - 6s \cdot \cos(\theta_0))\end{multlined}& \nonumber \\
+&\begin{multlined} a_x = x_1 - x_0 - s \cdot \cos(\theta_0) + 15x_1 - 15x_0 - 7s \cdot \cos(\theta_1) - 8s \cdot \cos(\theta_0) \\ - 10x_1 + 10x_0 + 4s \cdot \cos(\theta_1) + 6s \cdot \cos(\theta_0)\end{multlined}& \nonumber \\
+&a_x = 6x_1 - 6x_0 - 3s \cdot \cos(\theta_1) - 3s \cdot \cos(\theta_0)& \\
+\nonumber
+\end{flalign}
+
+Thus, we have computed \(a_x\), \(b_x\), \(c_x\) to be the following
+\begin{align*}
+a_x &= 6x_1 - 6x_0 - 3s \cdot \cos(\theta_1) - 3s \cdot \cos(\theta_0) \\
+b_x &= -15x_1 + 15x_0 + 7s \cdot \cos(\theta_1) + 8s \cdot \cos(\theta_0) \\
+c_x &= 10x_1 - 10x_0 - 4s \cdot \cos(\theta_1) - 6s \cdot \cos(\theta_0)
+\end{align*}
+
+\newpage 
+\underline{Solve for \(a_y\), \(b_y\), \(c_y\)}
+
+\begin{equation*}
+\begin{bmatrix}
+1 & 1 & 1 \\
+5 & 4 & 3 \\
+20 & 12 & 6
+\end{bmatrix}
+\begin{bmatrix}
+a_y \\ b_y \\ c_y
+\end{bmatrix}
+= \begin{bmatrix}
+y_1 - y_0 - s \cdot \sin(\theta_0) \\
+s \cdot \sin(\theta_1) - s \cdot \sin(\theta_0) \\
+0
+\end{bmatrix}
+\end{equation*}
+
+At a first glance, we can see here that the system of equations for the \(y\) term coefficients is identical to \(x\) with the following conversions 
+\begin{align*}
+x_0 &\Rightarrow y_0 \\
+x_1 &\Rightarrow y_1 \\
+\cos(\theta_0) &\Rightarrow \sin(\theta_0) \\
+\cos(\theta_1) &\Rightarrow \sin(\theta_1)
+\end{align*}
+
+Although we could use the same \(LU\) factorization from above since the \(A\) matrix is identical, the similarities in the \(b\) matrix means we can just apply the conversions directly to \(a_x\), \(b_x\), \(c_x\) to derive the equations for \(a_y\), \(b_y\), \(c_y\).
+\begin{align}
+a_y &= 6y_1 - 6y_0 - 3s \cdot \sin(\theta_1) - 3s \cdot \sin(\theta_0) \\
+b_y &= -15y_1 + 15y_0 + 7s \cdot \sin(\theta_1) + 8s \cdot \sin(\theta_0) \\
+c_y &= 10y_1 - 10y_0 - 4s \cdot \sin(\theta_1) - 6s \cdot \sin(\theta_0) \\
+\nonumber
+\end{align}
+
+It is good to note here that \textit{if} the \(b\) matrices differed in both cases, this would represent one of the main advantages of \(LU\) factorizations and why it was used in this case. Because the \(LU\) factorization remains the same, the only math that would have been repeated is the forward and back substitution.  
 \end{document}
