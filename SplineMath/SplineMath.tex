@@ -185,4 +185,222 @@ s \cdot \sin(\theta_1) - s \cdot \sin(\theta_0) \\
 0
 \end{bmatrix}
 \end{equation*}
+
+Since the \(A\) matrix is the same for both systems, we can create an LU factorization of the matrix and use that to solve both system
+\begin{equation*}
+A = \begin{bmatrix}
+1 & 1 & 1 \\
+5 & 4 & 3 \\
+20 & 12 & 6
+\end{bmatrix}
+\end{equation*}
+
+\underline{LU Factorization} 
+
+\begin{flalign*}
+&C_1 = \frac{1}{1} \begin{bmatrix}
+1 \\ 5 \\ 20
+\end{bmatrix}
+= \begin{bmatrix}
+1 \\ 5 \\ 20
+\end{bmatrix}& \\ \\
+&R_1 = \begin{bmatrix}
+1 & 1 & 1
+\end{bmatrix}&
+\end{flalign*}
+
+\begin{flalign*}
+&A = A - C_1 \cdot R_1& \\
+&A = \begin{bmatrix}
+1 & 1 & 1 \\
+5 & 4 & 3 \\
+20 & 12 & 6
+\end{bmatrix} 
+- \begin{bmatrix}
+1 \\ 5 \\ 20
+\end{bmatrix}
+\cdot \begin{bmatrix}
+1 & 1 & 1
+\end{bmatrix}& \\
+&A = \begin{bmatrix}
+1 & 1 & 1 \\
+5 & 4 & 3 \\
+20 & 12 & 6
+\end{bmatrix} 
+- \begin{bmatrix}
+1 & 1 & 1 \\
+5 & 5 & 5 \\
+20 & 20 & 20
+\end{bmatrix}& \\
+&A = \begin{bmatrix}
+0 & 0 & 0 \\
+0 & -1 & -2 \\
+0 & -8 & -14
+\end{bmatrix}&
+\end{flalign*}
+
+\begin{flalign*}
+&L = C_1& \\
+&L = \begin{bmatrix}
+1 \\ 5 \\ 20
+\end{bmatrix}& \\ \\
+&U = R_1& \\
+&U = \begin{bmatrix}
+1 & 1 & 1
+\end{bmatrix}
+\end{flalign*}
+
+\begin{flalign*}
+&C_2 = \frac{1}{-1} \begin{bmatrix}
+0 \\ -1 \\ -8
+\end{bmatrix}
+= \begin{bmatrix}
+0 \\ 1 \\ 8
+\end{bmatrix}& \\ \\
+&R_2 = \begin{bmatrix}
+0 & -1 & -2
+\end{bmatrix}
+\end{flalign*}
+
+\begin{flalign*}
+&A = A - C_2 \cdot R_2& \\
+&A = \begin{bmatrix}
+0 & 0 & 0 \\
+0 & -1 & -2 \\
+0 & -8 & -14
+\end{bmatrix}
+- \begin{bmatrix}
+0 \\ 1 \\ 8
+\end{bmatrix}
+\cdot \begin{bmatrix}
+0 & -1 & -2
+\end{bmatrix}& \\
+&A = \begin{bmatrix}
+0 & 0 & 0 \\
+0 & -1 & -2 \\
+0 & -8 & -14
+\end{bmatrix}
+- \begin{bmatrix}
+0 & 0 & 0 \\
+0 & -1 & -2 \\
+0 & -8 & -16
+\end{bmatrix}& \\
+&A = \begin{bmatrix}
+0 & 0 & 0 \\
+0 & 0 & 0 \\
+0 & 0 & 2
+\end{bmatrix}
+\end{flalign*}
+
+\begin{flalign*}
+&L = \begin{bmatrix}
+L & C_2
+\end{bmatrix}& \\
+&L = \begin{bmatrix}
+1 & 0 \\
+5 & 1 \\
+20 & 8
+\end{bmatrix}& \\ \\
+&U = \begin{bmatrix}
+U \\ R_2
+\end{bmatrix}& \\
+&U = \begin{bmatrix}
+1 & 1 & 1 \\
+0 & -1 & -2
+\end{bmatrix}
+\end{flalign*}
+
+\begin{flalign*}
+&C_3 = \frac{1}{2} \begin{bmatrix}
+0 \\ 0 \\ 2
+\end{bmatrix}
+= \begin{bmatrix}
+0 \\ 0 \\ 1
+\end{bmatrix}& \\ \\
+&R_3 = \begin{bmatrix}
+0 & 0 & 2
+\end{bmatrix}
+\end{flalign*}
+
+\begin{flalign*}
+&A = A - C_3 \cdot R_3& \\
+&A = \begin{bmatrix}
+0 & 0 & 0 \\
+0 & 0 & 0 \\
+0 & 0 & 2
+\end{bmatrix}
+- \begin{bmatrix}
+0 \\ 0 \\ 1
+\end{bmatrix}
+\cdot \begin{bmatrix}
+0 & 0 & 2
+\end{bmatrix}& \\
+&A = \begin{bmatrix}
+0 & 0 & 0 \\
+0 & 0 & 0 \\
+0 & 0 & 2
+\end{bmatrix}
+- \begin{bmatrix}
+0 & 0 & 0 \\
+0 & 0 & 0 \\
+0 & 0 & 2
+\end{bmatrix}& \\
+&A = \begin{bmatrix}
+0 & 0 & 0 \\
+0 & 0 & 0 \\
+0 & 0 & 0
+\end{bmatrix}&
+\end{flalign*}
+
+\begin{flalign*}
+&L = \begin{bmatrix}
+L & C_3
+\end{bmatrix}& \\
+&L = \begin{bmatrix}
+1 & 0 & 0 \\
+5 & 1 & 0 \\
+20 & 8 & 1
+\end{bmatrix}& \\ \\
+&U = \begin{bmatrix}
+U \\ R_3
+\end{bmatrix}& \\
+&U = \begin{bmatrix}
+1 & 1 & 1 \\
+0 & -1 & -2 \\
+0 & 0 & 2
+\end{bmatrix}
+\end{flalign*}
+
+Thus, we have an LU factorization where
+\begin{align*}
+L &= \begin{bmatrix}
+1 & 0 & 0 \\
+5 & 1 & 0 \\
+20 & 8 & 1
+\end{bmatrix} \\
+U &= \begin{bmatrix}
+1 & 1 & 1 \\
+0 & -1 & -2 \\
+0 & 0 & 2
+\end{bmatrix}
+\end{align*}
+such that 
+\begin{align*}
+A &= LU \\
+\begin{bmatrix}
+1 & 1 & 1 \\
+5 & 4 & 3 \\
+20 & 12 & 6
+\end{bmatrix}
+&= \begin{bmatrix}
+1 & 0 & 0 \\
+5 & 1 & 0 \\
+20 & 8 & 1
+\end{bmatrix}
+\cdot \begin{bmatrix}
+1 & 1 & 1 \\
+0 & -1 & -2 \\
+0 & 0 & 2
+\end{bmatrix}
+\end{align*}
 \end{document}
