@@ -569,7 +569,7 @@ x_1 &\Rightarrow y_1 \\
 \cos(\theta_1) &\Rightarrow \sin(\theta_1)
 \end{align*}
 
-Although we could use the same \(LU\) factorization from above since the \(A\) matrix is identical, the similarities in the \(b\) matrix means we can just apply the conversions directly to \(a_x\), \(b_x\), \(c_x\) to derive the equations for \(a_y\), \(b_y\), \(c_y\).
+Although we could use the same \(LU\) factorization from above since the \(A\) matrix is identical, the similarities in the \(b\) matrix means we can just apply the conversions directly to \(a_x\), \(b_x\), \(c_x\) to derive the equations for \(a_y\), \(b_y\), \(c_y\)
 \begin{align}
 a_y &= 6y_1 - 6y_0 - 3s \cdot \sin(\theta_1) - 3s \cdot \sin(\theta_0) \\
 b_y &= -15y_1 + 15y_0 + 7s \cdot \sin(\theta_1) + 8s \cdot \sin(\theta_0) \\
@@ -577,5 +577,45 @@ c_y &= 10y_1 - 10y_0 - 4s \cdot \sin(\theta_1) - 6s \cdot \sin(\theta_0) \\
 \nonumber
 \end{align}
 
-It is good to note here that \textit{if} the \(b\) matrices differed in both cases, this would represent one of the main advantages of \(LU\) factorizations and why it was used in this case. Because the \(LU\) factorization remains the same, the only math that would have been repeated is the forward and back substitution.  
+It is good to note here that \textit{if} the \(b\) matrices differed in both cases, this would represent one of the main advantages of \(LU\) factorizations and why it was used in this case. Because the \(LU\) factorization remains the same, the only math that would have been repeated is the forward and back substitution.
+
+\newpage 
+In conclusion, we have found a way to represent a spline in the quintic parametric form 
+\begin{gather*}
+x(t) = a_x t^5 + b_x t^4 + c_x t^3 + d_x t^2 + e_x t + f_x \\
+y(t) = a_y t^5 + b_y t^4 + c_y t^3 + d_y t^2 + e_y t + f_y \\
+\lbrace 0 \leq t \leq 1 \rbrace
+\end{gather*}
+
+given a \(P_0(x_0, y_0, \theta_0)\), \(P_1(x_1, y_1, \theta_1)\), and a scale factor \(s\) through the following equations
+\begin{align*}
+(23) &\Rightarrow & a_x &= 6x_1 - 6x_0 - 3s \cdot \cos(\theta_1) - 3s \cdot \cos(\theta_0) \\
+(22) &\Rightarrow & b_x &= -15x_1 + 15x_0 + 7s \cdot \cos(\theta_1) + 8s \cdot \cos(\theta_0) \\
+(21) &\Rightarrow & c_x &= 10x_1 - 10x_0 - 4s \cdot \cos(\theta_1) - 6s \cdot \cos(\theta_0) \\
+(9) &\Rightarrow & d_x &= 0 \\
+(5) &\Rightarrow & e_x &= s \cdot \cos(\theta_0) \\
+(1) &\Rightarrow & f_x &= x_0 \\
+\\
+(24) &\Rightarrow & a_y &= 6y_1 - 6y_0 - 3s \cdot \sin(\theta_1) - 3s \cdot \sin(\theta_0) \\
+(25) &\Rightarrow & b_y &= -15y_1 + 15y_0 + 7s \cdot \sin(\theta_1) + 8s \cdot \sin(\theta_0) \\
+(26) &\Rightarrow & c_y &= 10y_1 - 10y_0 - 4s \cdot \sin(\theta_1) - 6s \cdot \sin(\theta_0) \\
+(11) &\Rightarrow & d_y &= 0 \\
+(7) &\Rightarrow & e_y &= s \cdot \sin(\theta_0) \\
+(3) &\Rightarrow & f_y &= y_0 \\
+\end{align*}
+
+Substituting these into the original polynomial form, we end with the final parametric equation for modeling the spline between \(P_0\) and \(P_1\)
+\begin{equation*}				
+\begin{split}
+x(t) = &(6x_1 - 6x_0 - 3s \cdot \cos(\theta_1) - 3s \cdot \cos(\theta_0))t^5 + (-15x_1 + 15x_0 + 7s \cdot \cos(\theta_1) + 8s \cdot \cos(\theta_0))t^4 \\ 
+&+ (10x_1 - 10x_0 - 4s \cdot \cos(\theta_1) - 6s \cdot \cos(\theta_0))t^3 + (s \cdot \cos(\theta_0))t + x_0
+\end{split}
+\end{equation*}
+\begin{equation*}
+\begin{split}
+y(t) = &(6y_1 - 6y_0 - 3s \cdot \sin(\theta_1) - 3s \cdot \sin(\theta_0))t^5 + (-15y_1 + 15y_0 + 7s \cdot \sin(\theta_1) + 8s \cdot \sin(\theta_0))t^4 \\
+&+ (10y_1 - 10y_0 - 4s \cdot \sin(\theta_1) - 6s \cdot \sin(\theta_0))t^3 + (s \cdot \sin(\theta_0))t + y_0
+\end{split}
+\end{equation*}
+\[\lbrace 0 \leq t \leq 1 \rbrace\]
 \end{document}
