@@ -1,5 +1,9 @@
 #include <iostream>
 
-int main(int, char**) {
-    std::cout << "Hello, welcome to motion profiling!\n";
+#include "parse-args.h"
+
+int main(int argc, char *argv[]) {
+    ParseArgs pa(argc, argv);
+    
+    return 0;
 }
