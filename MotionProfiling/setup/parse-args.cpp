@@ -49,16 +49,40 @@ void ParseArgs::parseFile() {
     }
 
     std::string line;
-    std::string inputValue;
+    std::string strValue;
+    Waypoint point;
     getline(is, line); // Throw away first line in CSV, doesn't matter
 
-    // TODO actually store data instead of just printing it out
+    // TODO check formatting is correct
     while(getline(is, line)) {
         std::stringstream ss(line);
-        for(int i = 0; i < 3; ++i) { // Should be 3 values to read in (x, y, theta)
-            getline(ss, inputValue, ',');
-            std::cout << inputValue << " ";
-        }
-        std::cout << "\n";
-    }    
+
+        // Need to read in x, y, and theta from the line
+        std::getline(ss, strValue, ',');
+        double x = strToDouble(strValue);
+
+        std::getline(ss, strValue, ',');
+        double y = strToDouble(strValue);
+
+        std::getline(ss, strValue, ',');
+        double theta = strToDouble(strValue);
+
+        // Add point to vector
+        waypoints.emplace_back(Waypoint(x, y, theta));
+    }
+}
+
+double ParseArgs::strToDouble(std::string str) {
+    try {
+        return std::stod(str);
+    } catch (std::invalid_argument e) {
+        std::cerr << "Invalid value " << str << "\n";
+    } catch (std::out_of_range e) {
+        std::cerr << "Value " << str << " is out of range\n";
+    } catch(...) {
+        std::cerr << "Unknown error. Unable to parse " << str << "\n";
+    }
+
+    exit(1);
+    return 0.; // irrelevant
 }
