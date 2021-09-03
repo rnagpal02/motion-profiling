@@ -50,7 +50,6 @@ void ParseArgs::parseFile() {
 
     std::string line;
     std::string strValue;
-    Waypoint point;
     getline(is, line); // Throw away first line in CSV, doesn't matter
 
     // TODO check formatting is correct
@@ -72,7 +71,7 @@ void ParseArgs::parseFile() {
     }
 }
 
-double ParseArgs::strToDouble(std::string str) {
+double ParseArgs::strToDouble(const std::string &str) {
     try {
         return std::stod(str);
     } catch (std::invalid_argument e) {
