@@ -20,3 +20,10 @@ Spline::Spline(const Waypoint &p0, const Waypoint &p1) {
     ey = s * sin(p0.getTheta());
     fy = p0.getY();
 }
+
+double Spline::getX(double t) {
+    return ax * pow(t, 5) + bx * pow(t, 4) + cx * pow(t, 3) + dx * pow(t, 2) + ex * pow(t, 1) + fx;
+}
+double Spline::getY(double t) {
+    return ay * pow(t, 5) + by * pow(t, 4) + cy * pow(t, 3) + dy * pow(t, 2) + ey * pow(t, 1) + fy;
+}

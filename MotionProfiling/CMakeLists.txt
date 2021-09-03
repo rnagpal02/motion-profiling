@@ -5,7 +5,7 @@ include(CTest)
 enable_testing()
 
 include_directories(setup)
-include_directories(lib)
+include_directories(lib)    
 
 add_executable(MotionProfiling main.cpp setup/parse-args.cpp lib/path.cpp lib/spline.cpp)
 
