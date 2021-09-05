@@ -279,3 +279,6 @@ TSWLatexianTemp*
 # for VSCode
 **/build/
 **/.vscode/
+
+#ignore random test files
+*.csv

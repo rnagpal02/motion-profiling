@@ -8,11 +8,11 @@ private:
     double ax, bx, cx, dx, ex, fx;
     double ay, by, cy, dy, ey, fy;
 
-    double getX(double t);
-    double getY(double t);
-
 public:
     Spline(const Waypoint &p0, const Waypoint &p1);
+
+    double getX(double t);
+    double getY(double t);
 };
 
 #endif

@@ -17,11 +17,14 @@ ParseArgs::ParseArgs(int argc, char *argv[]) {
     // Vars to track options chosen
     bool stack_set = false, queue_set = false, output_set = false;
 
+    bool gotFile = false;
+
     // Get all options
     while ((option = getopt_long(argc, argv, "f:h", longOpts, &option_index)) != -1) {
         switch(option) {
             case 'f':
                 filename = std::string(optarg);
+                gotFile = true;
                 break;
             case 'h':
                 std::cerr << "This program reads in a CSV file containing waypoints for a \n" <<
@@ -38,6 +41,11 @@ ParseArgs::ParseArgs(int argc, char *argv[]) {
                 exit(1);
                 break;
         }
+    }
+
+    if(!gotFile) {
+        std::cerr << "No filename provided. Please use --help for more info.\n";
+        exit(1);
     }
 }
 

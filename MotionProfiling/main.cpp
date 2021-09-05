@@ -8,6 +8,7 @@ int main(int argc, char *argv[]) {
     pa.parseFile();
 
     Path path(pa.getWaypoints());
+    path.generateGraph();
 
     return 0;
 }
