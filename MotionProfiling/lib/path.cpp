@@ -8,10 +8,15 @@ Path::Path(const std::vector<Waypoint> &points, double dt) : dt(dt) {
 }
 
 void Path::generateGraph() {
-    for(auto spline : path) {
-        for(double t = 0; t <= 1; t += dt) {
-            x.push_back(spline.getX(t));
-            y.push_back(spline.getY(t));
+    xPoints.resize(path.size());
+    yPoints.resize(path.size());
+    
+    for(size_t i = 0; i < path.size(); ++i) {
+        xPoints[i].reserve(size_t(1. / dt + 1.));
+        yPoints[i].reserve(size_t(1. / dt + 1.));
+        for(double t = 0.; t <= 1.; t += dt) {
+            xPoints[i].push_back(path[i].getX(t));
+            yPoints[i].push_back(path[i].getY(t));
         }
     }
 }

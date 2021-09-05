@@ -11,7 +11,7 @@ include_directories(graphing)
 find_package(PythonLibs REQUIRED)
 include_directories(${PYTHON_INCLUDE_DIRS})
 
-add_executable(MotionProfiling main.cpp setup/parse-args.cpp lib/path.cpp lib/spline.cpp)
+add_executable(MotionProfiling main.cpp setup/parse-args.cpp lib/path.cpp lib/spline.cpp graphing/graphing.cpp)
 
 target_link_libraries(MotionProfiling ${PYTHON_LIBRARIES})
 
