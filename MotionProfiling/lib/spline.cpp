@@ -2,9 +2,17 @@
 
 #include <math.h>
 
-Spline::Spline(const Waypoint &p0, const Waypoint &p1) {
-    double s = 1.; // TODO optimize this for least squared curvature
+Spline::Spline(const Waypoint &p0, const Waypoint &p1) : p0(p0), p1(p1) {
+    computeLinearDistance();
+    computeCoefficients(optimizeScale());
+}
 
+Spline::Spline(const Waypoint &p0, const Waypoint &p1, double s) : p0(p0), p1(p1) {
+    computeLinearDistance();
+    computeCoefficients(s);
+}
+
+void Spline::computeCoefficients(double s) {
     // These equations come from SplineMath/SplineMath.pdf
     ax = 6. * p1.getX() - 6. * p0.getX() - 3. * s * cos(toRadians(p1.getTheta())) - 3. * s * cos(toRadians(p0.getTheta()));
     bx = -15. * p1.getX() + 15. * p0.getX() + 7. * s * cos(toRadians(p1.getTheta())) + 8. * s * cos(toRadians(p0.getTheta()));
@@ -21,9 +29,61 @@ Spline::Spline(const Waypoint &p0, const Waypoint &p1) {
     fy = p0.getY();
 }
 
-double Spline::getX(double t) {
-    return ax * pow(t, 5) + bx * pow(t, 4) + cx * pow(t, 3) + dx * pow(t, 2) + ex * pow(t, 1) + fx;
+void Spline::computeLinearDistance() {
+    linearDistance = sqrt(pow(p0.getX() - p1.getX(), 2) + pow(p0.getY() - p1.getY(), 2));
 }
-double Spline::getY(double t) {
-    return ay * pow(t, 5) + by * pow(t, 4) + cy * pow(t, 3) + dy * pow(t, 2) + ey * pow(t, 1) + fy;
+
+// TODO may want to look into optimizing this by path time once velocity profiles are added in
+double Spline::optimizeScale() {
+    // Use linear distance as initial guess
+    double s = linearDistance;
+
+    // k is curvature, dkds is rate of change of curvature with respect to s
+    double ds = 0.1 * s;
+    double dkds = (Spline(p0, p1, s + ds / 2).totalCurvatureSquared() - Spline(p0, p1, s - ds / 2).totalCurvatureSquared()) / ds;
+    
+    int numTries = 0;
+    while (abs(dkds) > MARGIN_ERROR && numTries < MAX_TRIES) {
+        double delta = dkds * DAMPENING_FACTOR;
+        s -= delta;
+        dkds = (Spline(p0, p1, s + ds / 2).totalCurvatureSquared() - Spline(p0, p1, s - ds / 2).totalCurvatureSquared()) / ds;
+        ++numTries;
+    }
+
+    return s;
+}
+
+double Spline::x(double t) {
+    return ax * pow(t, 5) + bx * pow(t, 4) + cx * pow(t, 3) + dx * pow(t, 2) + ex * t + fx;
+}
+double Spline::y(double t) {
+    return ay * pow(t, 5) + by * pow(t, 4) + cy * pow(t, 3) + dy * pow(t, 2) + ey * t + fy;
+}
+double Spline::dxdt(double t) {
+    return 5 * ax * pow(t, 4) + 4 * bx * pow(t, 3) + 3 * cx * pow(t, 2) + 2 * dx * t + ex;
+}
+double Spline::dydt(double t) {
+    return 5 * ay * pow(t, 4) + 4 * by * pow(t, 3) + 3 * cy * pow(t, 2) + 2 * dy * t + ey;
+}
+double Spline::dydx(double t) {
+    return dydt(t) / dxdt(t); // TODO check for divide by 0
+}
+double Spline::d2xdt(double t) {
+    return 20 * ax * pow(t, 3) + 12 * bx * pow(t, 2) + 6 * cx * t + 2 * dx;
+}
+double Spline::d2ydt(double t) {
+    return 20 * ay * pow(t, 3) + 12 * by * pow(t, 2) + 6 * cy * t + 2 * dy;
+}
+double Spline::d2ydx(double t) {
+    return (dxdt(t) * d2ydt(t) - d2xdt(t) * dydt(t)) / pow(dxdt(t), 3);
+}
+double Spline::curvature(double t) {
+    return abs(dxdt(t) * d2ydt(t) - dydt(t) * d2xdt(t)) / pow(pow(dxdt(t), 2) + pow(dydt(t), 2), 1.5);
+}
+double Spline::totalCurvatureSquared() {
+    double totalCurvature = 0;
+    for(double t = 0; t < 1; t += dt) {
+        totalCurvature += (pow(curvature(t), 2) * dt); // Could multiply by dt once at end but that might cause overflow
+    }
+    return totalCurvature;
 }
