@@ -1,6 +1,6 @@
-#include "velocity-profile.h"
+#include "path.h"
 
-bool VelocityProfile::generateVelocityProfile() {
+bool Path::VelocityProfile::generateVelocityProfile(const Path &path) {
     // TODO
 
     return true;

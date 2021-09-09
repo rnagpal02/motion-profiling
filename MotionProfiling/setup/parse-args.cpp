@@ -110,6 +110,11 @@ void ParseArgs::parseFile() {
         // Add point to vector
         waypoints.emplace_back(Waypoint(x, y, theta));
     }
+
+    if(waypoints.size() < 2) {
+        std::cerr << "Insufficient number of waypoints provided\n";
+        exit(1);
+    }
 }
 
 double ParseArgs::strToDouble(const std::string &str) {

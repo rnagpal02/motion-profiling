@@ -9,7 +9,7 @@ int main(int argc, char *argv[]) {
     pa.parseFile();
 
     Path path(pa.getWaypoints(), pa.getVelocity(), pa.getAcceleration(), pa.getWheelbase());
-    path.generateGraph();
+    path.generatePath();
 
     Graphing graphing;
     if(!graphing.generatePathGraph(path.getXPoints(), path.getYPoints(), 

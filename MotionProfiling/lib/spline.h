@@ -49,7 +49,6 @@ public:
     double curvature(double t);
     double totalCurvatureSquared();
 
-    void computePathDistance(double offset);
     void getLeftRightPoint(double t, double offset, std::pair<double, double> &left, std::pair<double, double> &right);
 
     double getdt() { return dt; }

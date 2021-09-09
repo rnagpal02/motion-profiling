@@ -31,26 +31,6 @@ void Spline::computeLinearDistance() {
     linearDistance = sqrt(pow(p0.getX() - p1.getX(), 2) + pow(p0.getY() - p1.getY(), 2));
 }
 
-void Spline::computePathDistance(double offset) {
-    leftPathDistance = 0;
-    rightPathDistance = 0;
-
-    std::pair<double, double> currentLeft, currentRight;
-    std::pair<double, double> nextLeft, nextRight;
-
-    getLeftRightPoint(0, offset, currentLeft, currentRight);
-
-    for(double t = 0; t < 1; t += dt) {
-        getLeftRightPoint(t + dt, offset, nextLeft, nextRight);
-
-        leftPathDistance += sqrt(pow((nextLeft.first - currentLeft.first) / dt, 2) + pow((nextLeft.second - currentLeft.second) / dt, 2)) * dt;
-        rightPathDistance += sqrt(pow((nextRight.first - currentRight.first) / dt, 2) + pow((nextRight.second - currentRight.second) / dt, 2)) * dt;
-
-        currentLeft = nextLeft;
-        currentRight = nextRight;
-    }
-}
-
 // TODO may want to look into optimizing this by path time once velocity profiles are added in
 double Spline::optimizeScale() {
     // Use linear distance as initial guess
