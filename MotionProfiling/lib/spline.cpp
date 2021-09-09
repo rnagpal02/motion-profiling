@@ -1,13 +1,11 @@
 #include "spline.h"
 
-#include <math.h>
-
-Spline::Spline(const Waypoint &p0, const Waypoint &p1) : p0(p0), p1(p1) {
+Spline::Spline(const Waypoint &p0, const Waypoint &p1) : p0(p0), p1(p1), leftPathDistance(0), rightPathDistance(0) {
     computeLinearDistance();
     computeCoefficients(optimizeScale());
 }
 
-Spline::Spline(const Waypoint &p0, const Waypoint &p1, double s) : p0(p0), p1(p1) {
+Spline::Spline(const Waypoint &p0, const Waypoint &p1, double s) : p0(p0), p1(p1), leftPathDistance(0), rightPathDistance(0) {
     computeLinearDistance();
     computeCoefficients(s);
 }
@@ -31,6 +29,26 @@ void Spline::computeCoefficients(double s) {
 
 void Spline::computeLinearDistance() {
     linearDistance = sqrt(pow(p0.getX() - p1.getX(), 2) + pow(p0.getY() - p1.getY(), 2));
+}
+
+void Spline::computePathDistance(double offset) {
+    leftPathDistance = 0;
+    rightPathDistance = 0;
+
+    std::pair<double, double> currentLeft, currentRight;
+    std::pair<double, double> nextLeft, nextRight;
+
+    getLeftRightPoint(0, offset, currentLeft, currentRight);
+
+    for(double t = 0; t < 1; t += dt) {
+        getLeftRightPoint(t + dt, offset, nextLeft, nextRight);
+
+        leftPathDistance += sqrt(pow((nextLeft.first - currentLeft.first) / dt, 2) + pow((nextLeft.second - currentLeft.second) / dt, 2)) * dt;
+        rightPathDistance += sqrt(pow((nextRight.first - currentRight.first) / dt, 2) + pow((nextRight.second - currentRight.second) / dt, 2)) * dt;
+
+        currentLeft = nextLeft;
+        currentRight = nextRight;
+    }
 }
 
 // TODO may want to look into optimizing this by path time once velocity profiles are added in
@@ -86,4 +104,50 @@ double Spline::totalCurvatureSquared() {
         totalCurvature += (pow(curvature(t), 2) * dt); // Could multiply by dt once at end but that might cause overflow
     }
     return totalCurvature;
+}
+
+void Spline::getLeftRightPoint(double t, double offset, std::pair<double, double> &left, std::pair<double, double> &right) {
+    if(isZero(dydt(t))) {
+        if(dxdt(t) > 0) {
+            left = std::make_pair<double, double>(x(t), y(t) + offset);
+            right = std::make_pair<double, double>(x(t), y(t) - offset);
+        } else {
+            left = std::make_pair<double, double>(x(t), y(t) - offset);
+            right = std::make_pair<double, double>(x(t), y(t) + offset);
+        }
+    } else if(isZero(dxdt(t))) {
+        if(dydt(t) > 0) {
+            left = std::make_pair<double, double>(x(t) - offset, y(t));
+            right = std::make_pair<double, double>(x(t) + offset, y(t));
+        } else {
+            left = std::make_pair<double, double>(x(t) + offset, y(t));
+            right = std::make_pair<double, double>(x(t) - offset, y(t));
+        }
+    } else {
+        double normalSlope = -1 / dydx(t);
+        double angle = atan(normalSlope);
+
+        std::pair<double, double> directionVect = std::make_pair<double, double>(abs(normalSlope * cos(angle)), abs(normalSlope * sin(angle)));
+        double scaleFactor = offset / sqrt(pow(directionVect.first, 2) + pow(directionVect.second, 2));
+        directionVect.first *= scaleFactor;
+        directionVect.second *= scaleFactor;
+
+        if(dydx(t) > 0) {
+            if(dxdt(t) > 0) {
+                left = std::make_pair<double, double>(x(t) - directionVect.first, y(t) + directionVect.second);
+                right = std::make_pair<double, double>(x(t) + directionVect.first, y(t) - directionVect.second);
+            } else {
+                left = std::make_pair<double, double>(x(t) + directionVect.first, y(t) - directionVect.second);
+                right = std::make_pair<double, double>(x(t) - directionVect.first, y(t) + directionVect.second);
+            }
+        } else {
+            if(dxdt(t) > 0) {
+                left = std::make_pair<double, double>(x(t) + directionVect.first, y(t) + directionVect.second);
+                right = std::make_pair<double, double>(x(t) - directionVect.first, y(t) - directionVect.second);
+            } else {
+                left = std::make_pair<double, double>(x(t) - directionVect.first, y(t) - directionVect.second);
+                right = std::make_pair<double, double>(x(t) + directionVect.first, y(t) + directionVect.second);
+            }
+        }
+    }   
 }
