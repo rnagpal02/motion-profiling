@@ -86,7 +86,7 @@ double Spline::totalCurvatureSquared() {
     return totalCurvature;
 }
 
-void Spline::getLeftRightPoint(double t, double offset, std::pair<double, double> &left, std::pair<double, double> &right) {
+void Spline::computeLeftRightPoint(double t, double offset, std::pair<double, double> &left, std::pair<double, double> &right) {
     if(isZero(dydt(t))) {
         if(dxdt(t) > 0) {
             left = std::make_pair<double, double>(x(t), y(t) + offset);
@@ -130,4 +130,11 @@ void Spline::getLeftRightPoint(double t, double offset, std::pair<double, double
             }
         }
     }   
+}
+
+double Spline::dDistance(double t) {
+    return sqrt(pow(dxdt(t), 2) + pow(dydt(t), 2)) * dt;
+}
+double Spline::dDistance(const std::pair<double, double> &currPoint, const std::pair<double, double> &nextPoint) {
+    return sqrt(pow((nextPoint.first - currPoint.first) / dt, 2) + pow((nextPoint.second - currPoint.second) / dt, 2)) * dt;
 }

@@ -24,8 +24,11 @@ private:
 
     std::vector<Spline> path; // Path is simply a vector of splines
 
-    std::vector<std::vector<double>> xPoints; // Vector of x coordinates for each spline
-    std::vector<std::vector<double>> yPoints; // Vector of y coordinates for each spline
+    std::vector<double> xWaypoints;
+    std::vector<double> yWaypoints;
+
+    std::vector<double> xPoints; // Vector of x coordinates for each spline
+    std::vector<double> yPoints; // Vector of y coordinates for each spline
 
     std::vector<double> leftXPoints;
     std::vector<double> leftYPoints;
@@ -47,8 +50,10 @@ public:
     void generatePath(); // Fill x and y vectors
     bool generateVelocityProfile();
 
-    const std::vector<std::vector<double>>& getXPoints() { return xPoints; }
-    const std::vector<std::vector<double>>& getYPoints() { return yPoints; }
+    const std::vector<double>& getXWayponts() { return xWaypoints; }
+    const std::vector<double>& getYWaypoints() { return yWaypoints; }
+    const std::vector<double>& getXPoints() { return xPoints; }
+    const std::vector<double>& getYPoints() { return yPoints; }
     const std::vector<double>& getLeftXPoints() { return leftXPoints; }
     const std::vector<double>& getLeftYPoints() { return leftYPoints; }
     const std::vector<double>& getRightXPoints() { return rightXPoints; }

@@ -12,7 +12,8 @@ int main(int argc, char *argv[]) {
     path.generatePath();
 
     Graphing graphing;
-    if(!graphing.generatePathGraph(path.getXPoints(), path.getYPoints(), 
+    if(!graphing.generatePathGraph(path.getXWayponts(), path.getYWaypoints(),
+                            path.getXPoints(), path.getYPoints(), 
                             path.getLeftXPoints(), path.getLeftYPoints(), 
                             path.getRightXPoints(), path.getRightYPoints())) {
         std::cerr << "Error graphing path\n";

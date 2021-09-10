@@ -4,7 +4,8 @@
 
 namespace plt = matplotlibcpp;
 
-bool Graphing::generatePathGraph(const std::vector<std::vector<double>> &xPoints, const std::vector<std::vector<double>> &yPoints,
+bool Graphing::generatePathGraph(const std::vector<double>& xWaypoints, const std::vector<double>& yWaypoints,
+                        const std::vector<double> &xPoints, const std::vector<double> &yPoints,
                         const std::vector<double> &leftXPoints, const std::vector<double> &leftYPoints,
                         const std::vector<double> &rightXPoints, const std::vector<double> &rightYPoints) {
     if (xPoints.empty() || xPoints.size() != yPoints.size()) {
@@ -12,16 +13,11 @@ bool Graphing::generatePathGraph(const std::vector<std::vector<double>> &xPoints
         return false;
     }
 
-    if(!plt::named_plot("left", leftXPoints, leftYPoints, "--") ||
+    if(!plt::scatter(xWaypoints, yWaypoints, 25) ||
+        !plt::plot(xPoints, yPoints) ||
+        !plt::named_plot("left", leftXPoints, leftYPoints, "--") ||
         !plt::named_plot("right", rightXPoints, rightYPoints, "--")) {
         return false;
-    }
-
-    std::string labelBase = "Spline ";
-    for(size_t i = 0; i < xPoints.size(); ++i) {
-        if(!plt::named_plot(labelBase + std::to_string(i+1), xPoints[i], yPoints[i])) {
-            return false;
-        }
     }
 
     plt::title("Path");
