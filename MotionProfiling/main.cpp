@@ -21,6 +21,14 @@ int main(int argc, char *argv[]) {
         std::cerr << "Error graphing path\n";
         exit(1);
     }
+    
+    std::cout << "Summary stats:\n"
+              << "Total path time: " << path.getPathTime() << " seconds\n" 
+              << "Total path length: " << path.getPathLength() << " units\n"
+              <<    "\tLeft path length: " << path.getLeftPathLength() << " units\n"
+              <<    "\tRight path length: " << path.getRightPathLength() << " units\n\n";
+    
+    std::cout << "Exit out of graph when done viewing.\n";
     graphing.showGraphs();
     return 0;
 }

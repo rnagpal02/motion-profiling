@@ -41,8 +41,9 @@ bool Graphing::generateVelocityGraph(const std::vector<double> &times,
 
     plt::title("Velocity Profile");
     plt::xlabel("Time (s)");
-    plt::ylabel("Velocity (U/s)");
+    plt::ylabel("Velocity (units/s)");
     plt::legend();
+    return true;
 }
 
 void Graphing::showGraphs() {

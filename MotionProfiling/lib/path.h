@@ -31,6 +31,8 @@ private:
 
         void generateVelocityProfile(const Path &path);
 
+        double getPathTime() { return pathTime; }
+
         const std::vector<double>& getTimes() { return times; }
         const std::vector<double>& getLeftVelocities() { return leftVelocities; }
         const std::vector<double>& getRightVelocities() { return rightVelocities; }
@@ -80,6 +82,7 @@ public:
     const std::vector<double>& getLeftVelocities() { return vProfile.getLeftVelocities(); }
     const std::vector<double>& getRightVelocities() { return vProfile.getRightVelocities(); }
 
+    double getPathTime() { return vProfile.getPathTime(); }
     double getPathLength() { return pathLength; }
     double getLeftPathLength() { return leftPathLength; }
     double getRightPathLength() { return rightPathLength; }
