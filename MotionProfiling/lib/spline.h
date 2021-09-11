@@ -16,8 +16,8 @@ private:
     void computeCoefficients(double s);
     double optimizeScale();
 
-    double toRadians(double degrees) { return degrees * (PI / 180.); }
-    bool isZero(double val) { return abs(val) < EPSILON; }
+    double toRadians(double degrees) const { return degrees * (PI / 180.); }
+    bool isZero(double val) const { return abs(val) < EPSILON; }
 
 
     double ax, bx, cx, dx, ex, fx;
@@ -38,25 +38,27 @@ private:
 public:
     Spline(const Waypoint &p0, const Waypoint &p1);
 
-    double x(double t);
-    double y(double t);
-    double dxdt(double t);
-    double dydt(double t);
-    double dydx(double t);
-    double d2xdt(double t);
-    double d2ydt(double t);
-    double d2ydx(double t);
-    double curvature(double t);
-    double totalCurvatureSquared();
+    double x(double t) const;
+    double y(double t) const;
+    double dxdt(double t) const;
+    double dydt(double t) const;
+    double dydx(double t) const;
+    double d2xdt(double t) const;
+    double d2ydt(double t) const;
+    double d2ydx(double t) const;
+    double curvature(double t) const;
+    double totalCurvatureSquared() const;
 
-    void computeLeftRightPoint(double t, double offset, std::pair<double, double> &left, std::pair<double, double> &right);
+    void computeLeftRightPoint(double t, double offset, std::pair<double, double> &left, std::pair<double, double> &right) const;
     
-    double dDistance(double t);
-    double dDistance(const std::pair<double, double> &currPoint, const std::pair<double, double> &nextPoint);
+    double dDistance(double t) const;
+    double dDistance(const std::pair<double, double> &currPoint, const std::pair<double, double> &nextPoint) const;
 
-    double getdt() { return dt; }
-    double getLeftPathDistance() { return leftPathDistance; }
-    double getRightPathDistance() { return rightPathDistance; }
+    bool isLeftOuter(double t) const;
+
+    double getdt() const { return dt; }
+    double getLeftPathDistance() const { return leftPathDistance; }
+    double getRightPathDistance() const { return rightPathDistance; }
 };
 
 #endif

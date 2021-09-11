@@ -51,34 +51,34 @@ double Spline::optimizeScale() {
     return s;
 }
 
-double Spline::x(double t) {
+double Spline::x(double t) const {
     return ax * pow(t, 5) + bx * pow(t, 4) + cx * pow(t, 3) + dx * pow(t, 2) + ex * t + fx;
 }
-double Spline::y(double t) {
+double Spline::y(double t) const {
     return ay * pow(t, 5) + by * pow(t, 4) + cy * pow(t, 3) + dy * pow(t, 2) + ey * t + fy;
 }
-double Spline::dxdt(double t) {
+double Spline::dxdt(double t) const {
     return 5 * ax * pow(t, 4) + 4 * bx * pow(t, 3) + 3 * cx * pow(t, 2) + 2 * dx * t + ex;
 }
-double Spline::dydt(double t) {
+double Spline::dydt(double t) const {
     return 5 * ay * pow(t, 4) + 4 * by * pow(t, 3) + 3 * cy * pow(t, 2) + 2 * dy * t + ey;
 }
-double Spline::dydx(double t) {
+double Spline::dydx(double t) const {
     return dydt(t) / dxdt(t); // TODO check for divide by 0
 }
-double Spline::d2xdt(double t) {
+double Spline::d2xdt(double t) const {
     return 20 * ax * pow(t, 3) + 12 * bx * pow(t, 2) + 6 * cx * t + 2 * dx;
 }
-double Spline::d2ydt(double t) {
+double Spline::d2ydt(double t) const {
     return 20 * ay * pow(t, 3) + 12 * by * pow(t, 2) + 6 * cy * t + 2 * dy;
 }
-double Spline::d2ydx(double t) {
+double Spline::d2ydx(double t) const {
     return (dxdt(t) * d2ydt(t) - d2xdt(t) * dydt(t)) / pow(dxdt(t), 3);
 }
-double Spline::curvature(double t) {
+double Spline::curvature(double t) const {
     return abs(dxdt(t) * d2ydt(t) - dydt(t) * d2xdt(t)) / pow(pow(dxdt(t), 2) + pow(dydt(t), 2), 1.5);
 }
-double Spline::totalCurvatureSquared() {
+double Spline::totalCurvatureSquared() const {
     double totalCurvature = 0;
     for(double t = 0; t < 1; t += dt) {
         totalCurvature += (pow(curvature(t), 2) * dt); // Could multiply by dt once at end but that might cause overflow
@@ -86,7 +86,7 @@ double Spline::totalCurvatureSquared() {
     return totalCurvature;
 }
 
-void Spline::computeLeftRightPoint(double t, double offset, std::pair<double, double> &left, std::pair<double, double> &right) {
+void Spline::computeLeftRightPoint(double t, double offset, std::pair<double, double> &left, std::pair<double, double> &right) const {
     if(isZero(dydt(t))) {
         if(dxdt(t) > 0) {
             left = std::make_pair<double, double>(x(t), y(t) + offset);
@@ -132,9 +132,25 @@ void Spline::computeLeftRightPoint(double t, double offset, std::pair<double, do
     }   
 }
 
-double Spline::dDistance(double t) {
+double Spline::dDistance(double t) const {
     return sqrt(pow(dxdt(t), 2) + pow(dydt(t), 2)) * dt;
 }
-double Spline::dDistance(const std::pair<double, double> &currPoint, const std::pair<double, double> &nextPoint) {
+double Spline::dDistance(const std::pair<double, double> &currPoint, const std::pair<double, double> &nextPoint) const {
     return sqrt(pow((nextPoint.first - currPoint.first) / dt, 2) + pow((nextPoint.second - currPoint.second) / dt, 2)) * dt;
+}
+
+bool Spline::isLeftOuter(double t) const {
+    if(d2ydx(t) > 0) {
+        if(dxdt(t) > 0) {
+            return false;
+        } else {
+            return true;
+        }
+    } else {
+        if(dxdt(t) > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 }

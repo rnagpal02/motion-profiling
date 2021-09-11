@@ -4,19 +4,20 @@
 
 namespace plt = matplotlibcpp;
 
+Graphing::Graphing() {
+    plt::suptitle("Motion Profiling");
+}
+
 bool Graphing::generatePathGraph(const std::vector<double>& xWaypoints, const std::vector<double>& yWaypoints,
                         const std::vector<double> &xPoints, const std::vector<double> &yPoints,
                         const std::vector<double> &leftXPoints, const std::vector<double> &leftYPoints,
                         const std::vector<double> &rightXPoints, const std::vector<double> &rightYPoints) {
-    if (xPoints.empty() || xPoints.size() != yPoints.size()) {
-        std::cerr << "Invalid data points provided for graphing\n";
-        return false;
-    }
+    plt::subplot(1, 2, 1);
 
     if(!plt::scatter(xWaypoints, yWaypoints, 25) ||
-        !plt::plot(xPoints, yPoints) ||
-        !plt::named_plot("left", leftXPoints, leftYPoints, "--") ||
-        !plt::named_plot("right", rightXPoints, rightYPoints, "--")) {
+        !plt::named_plot("Left", leftXPoints, leftYPoints, "--") ||
+        !plt::named_plot("Right", rightXPoints, rightYPoints, "--") ||
+        !plt::plot(xPoints, yPoints)) {
         return false;
     }
 
@@ -28,6 +29,20 @@ bool Graphing::generatePathGraph(const std::vector<double>& xWaypoints, const st
     plt::set_aspect_equal();
 
     return true;
+}
+
+bool Graphing::generateVelocityGraph(const std::vector<double> &times, 
+                                    const std::vector<double> &leftVelocities, const std::vector<double> &rightVelocities) {
+    plt::subplot(1, 2, 2);
+    if(!plt::named_plot("Left", times, leftVelocities) ||
+        !plt::named_plot("Right", times, rightVelocities)) {
+        return false;
+    }
+
+    plt::title("Velocity Profile");
+    plt::xlabel("Time (s)");
+    plt::ylabel("Velocity (U/s)");
+    plt::legend();
 }
 
 void Graphing::showGraphs() {

@@ -13,6 +13,9 @@ void Path::generatePath() {
     leftPathLength = 0;
     rightPathLength = 0;
 
+    leftDistances.push_back(leftPathLength);
+    rightDistances.push_back(rightPathLength);
+
     std::pair<double, double> currLeftPoint;
     std::pair<double, double> currRightPoint;
 
@@ -41,6 +44,9 @@ void Path::generatePath() {
             leftPathLength += path[i].dDistance(currLeftPoint, nextLeftPoint);
             rightPathLength += path[i].dDistance(currRightPoint, nextRightPoint);
 
+            leftDistances.push_back(leftPathLength);
+            rightDistances.push_back(rightPathLength);
+
             currLeftPoint = nextLeftPoint;
             currRightPoint = nextRightPoint;
         }
@@ -50,6 +56,6 @@ void Path::generatePath() {
     yWaypoints.push_back(path.back().y(1));
 }
 
-bool Path::generateVelocityProfile() {
-    return vProfile.generateVelocityProfile(*this);
+void Path::generateVelocityProfile() {
+    vProfile.generateVelocityProfile(*this);
 }
